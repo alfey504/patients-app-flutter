@@ -22,6 +22,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   final newPasswordController = TextEditingController();
 
+  bool verifyInput() {
+    if (username.isEmpty) {
+      showAlertDialog(context, "Missing Fields", "Please enter a username");
+      return false;
+    }
+    if (password.isEmpty) {
+      showAlertDialog(context, "Missing Fields", "Please enter a password");
+      return false;
+    }
+    if (email.isEmpty) {
+      showAlertDialog(context, "Missing Fields", "Please enter a email");
+      return false;
+    }
+    return false;
+  }
+
   void routeToNextScreen() {
     Navigator.pushNamed(context, '/');
   }
