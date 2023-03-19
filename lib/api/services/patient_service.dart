@@ -119,4 +119,46 @@ class PatientService {
       throw Exception("Api call failed");
     }
   }
+
+  Future<PatientDataModel> editPatientData(PatientDataModel patientData) async {
+    if (!UserAuth.isAuthorized()) {
+      throw Exception("User not authorized");
+    }
+
+    final jsonBody = jsonEncode({
+      'id': patientData.id,
+      'record_link': patientData.recordLink,
+      'PatientName': patientData.patientName,
+      'Age': patientData.age,
+      'DOB': patientData.dob,
+      "Status": patientData.status,
+      "Address": patientData.address,
+      "City": patientData.city,
+      "PostalCode": patientData.postalCode,
+      "Allergies": patientData.allergies,
+      "EmergencyContactName": patientData.emergencyContactName,
+      "EmergencyContactNumber": patientData.emergencyContactNumber,
+      "MedicalCondition": patientData.medicalCondition,
+      "token": UserAuth.token,
+      "password": UserAuth.password
+    });
+
+    final uri = Uri.parse(
+        "https://we-care-centennial.herokuapp.com/wecare/patient/${patientData.id}");
+    final headers = {HttpHeaders.contentTypeHeader: 'application/json'};
+
+    final response = await http.patch(uri, headers: headers, body: jsonBody);
+
+    if (response.statusCode == 200) {
+      try {
+        final registerResponse =
+            PatientDataModel.fromJson(jsonDecode(response.body));
+        return registerResponse;
+      } on Exception catch (_, e) {
+        throw Exception("Issue editing data");
+      }
+    } else {
+      throw Exception("Error calling the api");
+    }
+  }
 }

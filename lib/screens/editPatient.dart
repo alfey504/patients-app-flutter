@@ -1,17 +1,74 @@
 import 'package:flutter/material.dart';
+import 'package:we_care/api/models/add_patient_response.dart';
+import 'package:we_care/api/services/patient_service.dart';
 import 'package:we_care/components/my_textfield.dart';
 import 'package:we_care/components/smallbuttons.dart';
+import 'package:we_care/main.dart';
 
-class EditPatient extends StatelessWidget {
+class EditPatient extends StatefulWidget {
   EditPatient({super.key});
 
-  final patientController = TextEditingController();
+  @override
+  State<EditPatient> createState() => _EditPatientState();
+}
 
-  void findPatient() {}
+class _EditPatientState extends State<EditPatient> {
+  late MutablePatientDataModel patientData;
+  bool initSet = false;
   void registerUser() {}
+
+  final patientNameController = TextEditingController();
+  final ageController = TextEditingController();
+  final dobController = TextEditingController();
+  final statusController = TextEditingController();
+  final addressController = TextEditingController();
+  final cityController = TextEditingController();
+  final postalCodeController = TextEditingController();
+  final allergiesController = TextEditingController();
+  final emergencyContactNameController = TextEditingController();
+  final emergencyContactNumberController = TextEditingController();
+  final medicalConditionController = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (!initSet) {
+      final data =
+          ModalRoute.of(context)!.settings.arguments as PatientDataModel;
+      patientData = MutablePatientDataModel.fromPatientDataModel(data);
+
+      patientNameController.text = patientData.patientName;
+      ageController.text = patientData.age;
+      dobController.text = patientData.dob;
+      statusController.text = patientData.status;
+      addressController.text = patientData.address;
+      postalCodeController.text = patientData.postalCode;
+      allergiesController.text = patientData.allergies;
+      emergencyContactNameController.text = patientData.emergencyContactName;
+      emergencyContactNumberController.text =
+          patientData.emergencyContactNumber;
+      medicalConditionController.text = patientData.medicalCondition;
+      initSet = true;
+    }
+
+    void editPatient() {
+      print(patientData.allergies);
+      final patientService = PatientService();
+      final response =
+          patientService.editPatientData(patientData.toPatientDataModel());
+
+      response.then((value) {
+        Navigator.pushNamed(context, '/onepatient', arguments: value);
+      }).onError((error, stackTrace) {
+        showAlertDialog(context, "Issue", error.toString());
+      });
+    }
+
     return MaterialApp(
       home: Scaffold(
         backgroundColor: Colors.grey[300],
@@ -26,53 +83,109 @@ class EditPatient extends StatelessWidget {
                 ),
                 const SizedBox(height: 8.0),
                 MyTextField(
-                    controller: patientController,
-                    hintText: 'John Doe',
+                    onChange: (String newText) {
+                      setState(() {
+                        patientData.patientName = newText;
+                      });
+                    },
+                    controller: patientNameController,
+                    hintText: 'First and Last Name',
                     obscureText: false),
                 const SizedBox(height: 8.0),
                 MyTextField(
-                    controller: patientController,
-                    hintText: '25/04/1990',
+                    onChange: (String newText) {
+                      setState(() {
+                        patientData.age = newText;
+                      });
+                    },
+                    controller: ageController,
+                    hintText: 'Age',
                     obscureText: false),
                 const SizedBox(height: 8.0),
                 MyTextField(
-                    controller: patientController,
-                    hintText: 'Critical',
+                    onChange: (String newText) {
+                      setState(() {
+                        patientData.dob = newText;
+                      });
+                    },
+                    controller: dobController,
+                    hintText: 'Birthday',
                     obscureText: false),
                 const SizedBox(height: 8.0),
                 MyTextField(
-                    controller: patientController,
-                    hintText: '941 Progress Ave',
+                    onChange: (String newText) {
+                      setState(() {
+                        patientData.status = newText;
+                      });
+                    },
+                    controller: statusController,
+                    hintText: 'Status',
                     obscureText: false),
                 const SizedBox(height: 8.0),
                 MyTextField(
-                    controller: patientController,
-                    hintText: 'M1T 2M5',
+                    onChange: (String newText) {
+                      setState(() {
+                        patientData.address = newText;
+                      });
+                    },
+                    controller: addressController,
+                    hintText: 'Address',
                     obscureText: false),
                 const SizedBox(height: 8.0),
                 MyTextField(
-                    controller: patientController,
-                    hintText: 'No',
+                    onChange: (String newText) {
+                      setState(() {
+                        patientData.postalCode = newText;
+                      });
+                    },
+                    controller: postalCodeController,
+                    hintText: 'Postal Code',
                     obscureText: false),
                 const SizedBox(height: 8.0),
                 MyTextField(
-                    controller: patientController,
-                    hintText: 'Anna Doe',
+                    onChange: (String newText) {
+                      setState(() {
+                        patientData.allergies = newText;
+                        print(patientData.allergies);
+                      });
+                    },
+                    controller: allergiesController,
+                    hintText: 'Allergies',
                     obscureText: false),
                 const SizedBox(height: 8.0),
                 MyTextField(
-                    controller: patientController,
-                    hintText: '647-xxx-xxxx',
+                    onChange: (String newText) {
+                      setState(() {
+                        patientData.emergencyContactName = newText;
+                      });
+                    },
+                    controller: emergencyContactNameController,
+                    hintText: 'Emergency Contact Name',
                     obscureText: false),
                 const SizedBox(height: 8.0),
                 MyTextField(
-                    controller: patientController,
-                    hintText: 'Diabetes',
+                    onChange: (String newText) {
+                      setState(() {
+                        patientData.emergencyContactNumber = newText;
+                      });
+                    },
+                    controller: emergencyContactNumberController,
+                    hintText: 'Emergency Contact Number',
+                    obscureText: false),
+                const SizedBox(height: 8.0),
+                MyTextField(
+                    onChange: (String newText) {
+                      setState(() {
+                        patientData.medicalCondition = newText;
+                      });
+                    },
+                    controller: medicalConditionController,
+                    hintText: 'Medical Conditions',
                     obscureText: false),
                 const SizedBox(height: 8.0),
                 MySmallButton(
                   onTap: () {
-                    Navigator.pushNamed(context, '/onepatient');
+                    editPatient();
                   },
                   buttonTitle: "Save",
                   bckgColor: Colors.white,
@@ -81,7 +194,7 @@ class EditPatient extends StatelessWidget {
                 const SizedBox(height: 8.0),
                 MySmallButton(
                   onTap: () {
-                    Navigator.pushNamed(context, '/onepatient');
+                    Navigator.pushNamed(context, '/home');
                   },
                   buttonTitle: "Go Back",
                   bckgColor: Colors.white,

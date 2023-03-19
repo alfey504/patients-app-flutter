@@ -73,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
       UserAuth.token = value.token;
       UserAuth.password = password;
 
-      print("${UserAuth.token},r ${UserAuth.password}");
+      print("${UserAuth.token}, ${UserAuth.password}");
       gotToHome();
     }).catchError((error) {
       showAlertDialog(context, "issues", error.toString());

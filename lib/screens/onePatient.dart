@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:we_care/api/services/patient_service.dart';
-import 'package:we_care/components/my_textfield.dart';
-import 'package:we_care/components/my_button.dart';
 import 'package:we_care/components/smallbuttons.dart';
-import 'package:we_care/components/patient.dart';
 import 'package:we_care/main.dart';
-import 'package:we_care/screens/onePatient.dart';
 
 import '../api/models/add_patient_response.dart';
 
@@ -165,7 +161,8 @@ class OnePatient extends StatelessWidget {
 
                 MySmallButton(
                   onTap: () {
-                    Navigator.pushNamed(context, '/edit_patient');
+                    Navigator.pushNamed(context, '/edit_patient',
+                        arguments: patientData);
                   },
                   buttonTitle: "Edit",
                   bckgColor: const Color.fromARGB(255, 108, 171, 123),
