@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:we_care/components/my_textfield.dart';
-import 'package:we_care/components/my_button.dart';
 import 'package:we_care/components/smallbuttons.dart';
-import 'package:we_care/components/patient.dart';
-import 'package:we_care/screens/onePatient.dart';
+
 class EditPatient extends StatelessWidget {
   EditPatient({super.key});
 
@@ -29,62 +27,49 @@ class EditPatient extends StatelessWidget {
                 const SizedBox(height: 8.0),
                 MyTextField(
                     controller: patientController,
-                    
                     hintText: 'John Doe',
                     obscureText: false),
                 const SizedBox(height: 8.0),
-                
                 MyTextField(
                     controller: patientController,
                     hintText: '25/04/1990',
-                   
                     obscureText: false),
                 const SizedBox(height: 8.0),
-                 MyTextField(
+                MyTextField(
                     controller: patientController,
                     hintText: 'Critical',
-                   
                     obscureText: false),
                 const SizedBox(height: 8.0),
                 MyTextField(
                     controller: patientController,
                     hintText: '941 Progress Ave',
-                     
                     obscureText: false),
                 const SizedBox(height: 8.0),
-                
-                 MyTextField(
+                MyTextField(
                     controller: patientController,
                     hintText: 'M1T 2M5',
-                   
                     obscureText: false),
                 const SizedBox(height: 8.0),
-               
-                 MyTextField(
+                MyTextField(
                     controller: patientController,
-                   
                     hintText: 'No',
                     obscureText: false),
                 const SizedBox(height: 8.0),
-                 MyTextField(
+                MyTextField(
                     controller: patientController,
-                   
                     hintText: 'Anna Doe',
                     obscureText: false),
                 const SizedBox(height: 8.0),
-                 MyTextField(
+                MyTextField(
                     controller: patientController,
                     hintText: '647-xxx-xxxx',
-                  
                     obscureText: false),
                 const SizedBox(height: 8.0),
                 MyTextField(
                     controller: patientController,
                     hintText: 'Diabetes',
-                   
                     obscureText: false),
                 const SizedBox(height: 8.0),
-               
                 MySmallButton(
                   onTap: () {
                     Navigator.pushNamed(context, '/onepatient');
@@ -94,7 +79,7 @@ class EditPatient extends StatelessWidget {
                   buttonFontColor: Colors.black,
                 ),
                 const SizedBox(height: 8.0),
-                 MySmallButton(
+                MySmallButton(
                   onTap: () {
                     Navigator.pushNamed(context, '/onepatient');
                   },
@@ -102,7 +87,6 @@ class EditPatient extends StatelessWidget {
                   bckgColor: Colors.white,
                   buttonFontColor: Colors.black,
                 ),
-              
               ],
             ),
           ),

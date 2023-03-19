@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:we_care/api/services/api_service.dart';
+import 'package:we_care/api/services/user_service.dart';
 import 'package:we_care/components/my_textfield.dart';
 import 'package:we_care/components/my_button.dart';
 import 'package:we_care/screens/register.dart';
@@ -11,6 +11,7 @@ import 'package:we_care/screens/addPatient.dart';
 import 'package:we_care/screens/records.dart';
 import 'package:we_care/screens/editPatient.dart';
 import 'package:we_care/screens/addRecord.dart';
+import 'package:we_care/user/user_auth.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -22,7 +23,7 @@ void main() {
       // When navigating to the "/" route, build the FirstScreen widget.
       '/': (context) => LoginPage(),
       // When navigating to the "/second" route, build the SecondScreen widget.
-      '/register': (context) => RegisterScreen(),
+      '/register': (context) => const RegisterScreen(),
       '/home': (context) => HomeScreen(),
       '/allpatients': (context) => AllPatients(),
       '/onepatient': (context) => OnePatient(),
@@ -68,14 +69,15 @@ class _LoginPageState extends State<LoginPage> {
     final apiService = ApiService();
     var data = apiService.loginUser(username, password);
 
-    var success = false;
-
     data.then((value) {
-      print(value[0].token);
+      UserAuth.token = value.token;
+      UserAuth.password = password;
+
+      print("${UserAuth.token},r ${UserAuth.password}");
       gotToHome();
     }).catchError((error) {
-      showAlertDialog(context, "issues", error.message);
-      print(error.message);
+      showAlertDialog(context, "issues", error.toString());
+      print(error.toString());
     });
   }
 
@@ -87,83 +89,81 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        backgroundColor: Colors.grey[300],
-        body: SafeArea(
-          child: Center(
-            child: Column(
-              children: [
-                const SizedBox(height: 50.0),
-                const Icon(
-                  Icons.people,
-                  size: 100,
+    return Scaffold(
+      backgroundColor: Colors.grey[300],
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            children: [
+              const SizedBox(height: 50.0),
+              const Icon(
+                Icons.people,
+                size: 100,
+              ),
+              const SizedBox(height: 50),
+              Text(
+                'Welcome back, you have been missed!',
+                style: TextStyle(
+                  color: Colors.teal[900],
+                  fontSize: 16,
                 ),
-                const SizedBox(height: 50),
-                Text(
-                  'Welcome back, you have been missed!',
-                  style: TextStyle(
-                    color: Colors.teal[900],
-                    fontSize: 16,
-                  ),
-                ),
-                const SizedBox(height: 25),
-                MyTextField(
-                    onChange: (String newText) {
-                      setState(() {
-                        username = newText;
-                      });
-                    },
-                    controller: usernameController,
-                    hintText: 'Username',
-                    obscureText: false),
-                const SizedBox(height: 16.0),
-                MyTextField(
-                    onChange: (String newText) {
-                      setState(() {
-                        password = newText;
-                      });
-                    },
-                    controller: passwordController,
-                    hintText: 'Password',
-                    obscureText: true),
-                const SizedBox(height: 16.0),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        'Forgot Password?',
-                        style: TextStyle(color: Colors.grey[600]),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 25.0),
-                MyButton(
-                  onTap: () {
-                    if (!verifyInputs()) {
-                      return;
-                    }
-                    signUserIn();
+              ),
+              const SizedBox(height: 25),
+              MyTextField(
+                  onChange: (String newText) {
+                    setState(() {
+                      username = newText;
+                    });
                   },
-                  buttonTitle: "Sign In",
-                  bckgColor: Colors.black,
-                  buttonFontColor: Colors.white,
-                ),
-                const SizedBox(height: 15.0),
-                MyButton(
-                  onTap: () {
-                    Navigator.pushNamed(context, '/register');
+                  controller: usernameController,
+                  hintText: 'Username',
+                  obscureText: false),
+              const SizedBox(height: 16.0),
+              MyTextField(
+                  onChange: (String newText) {
+                    setState(() {
+                      password = newText;
+                    });
                   },
-                  buttonTitle: "Register",
-                  bckgColor: Colors.white,
-                  buttonFontColor: Colors.black,
+                  controller: passwordController,
+                  hintText: 'Password',
+                  obscureText: true),
+              const SizedBox(height: 16.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      'Forgot Password?',
+                      style: TextStyle(color: Colors.grey[600]),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 50.0),
-              ],
-            ),
+              ),
+              const SizedBox(height: 25.0),
+              MyButton(
+                onTap: () {
+                  if (!verifyInputs()) {
+                    return;
+                  }
+                  signUserIn();
+                },
+                buttonTitle: "Sign In",
+                bckgColor: Colors.black,
+                buttonFontColor: Colors.white,
+              ),
+              const SizedBox(height: 15.0),
+              MyButton(
+                onTap: () {
+                  Navigator.pushNamed(context, '/register');
+                },
+                buttonTitle: "Register",
+                bckgColor: Colors.white,
+                buttonFontColor: Colors.black,
+              ),
+              const SizedBox(height: 50.0),
+            ],
           ),
         ),
       ),

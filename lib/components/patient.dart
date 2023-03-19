@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 
 class Patient extends StatelessWidget {
   final Function()? onTap;
-  final String patientID;
+  final String patientName;
+  final String patientId;
   final Color bckgColor;
   final Color buttonFontColor;
 
   const Patient(
       {super.key,
       required this.onTap,
-      required this.patientID,
+      required this.patientName,
+      required this.patientId,
       required this.bckgColor,
       required this.buttonFontColor});
 
@@ -26,7 +28,7 @@ class Patient extends StatelessWidget {
         ),
         child: Center(
           child: Text(
-            patientID,
+            patientName,
             style: TextStyle(
               color: buttonFontColor,
               fontWeight: FontWeight.bold,

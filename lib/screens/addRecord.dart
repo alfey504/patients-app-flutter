@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:we_care/components/my_textfield.dart';
-import 'package:we_care/components/my_button.dart';
 import 'package:we_care/components/smallbuttons.dart';
-import 'package:we_care/components/patient.dart';
-import 'package:we_care/screens/onePatient.dart';
+
 class AddRecord extends StatelessWidget {
   AddRecord({super.key});
 
@@ -30,24 +28,18 @@ class AddRecord extends StatelessWidget {
                 MyTextField(
                     controller: patientController,
                     hintText: 'Date',
-                     
                     obscureText: false),
                 const SizedBox(height: 8.0),
-                
                 MyTextField(
                     controller: patientController,
                     hintText: 'Data type',
-                   
                     obscureText: false),
                 const SizedBox(height: 8.0),
-                 MyTextField(
+                MyTextField(
                     controller: patientController,
                     hintText: 'Value',
-                   
                     obscureText: false),
                 const SizedBox(height: 8.0),
-               
-               
                 MySmallButton(
                   onTap: () {
                     Navigator.pushNamed(context, '/records');
@@ -57,7 +49,7 @@ class AddRecord extends StatelessWidget {
                   buttonFontColor: Colors.black,
                 ),
                 const SizedBox(height: 8.0),
-                 MySmallButton(
+                MySmallButton(
                   onTap: () {
                     Navigator.pushNamed(context, '/records');
                   },
@@ -65,7 +57,6 @@ class AddRecord extends StatelessWidget {
                   bckgColor: Colors.white,
                   buttonFontColor: Colors.black,
                 ),
-              
               ],
             ),
           ),

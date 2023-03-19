@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:we_care/api/services/user_service.dart';
 import 'package:we_care/components/my_textfield.dart';
 import 'package:we_care/components/my_button.dart';
+import 'package:we_care/main.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -12,6 +14,7 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   var username = "";
   var password = "";
+  var email = "";
 
   final newUsernameController = TextEditingController();
 
@@ -19,7 +22,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   final newPasswordController = TextEditingController();
 
-  void registerUser() {}
+  void routeToNextScreen() {
+    Navigator.pushNamed(context, '/');
+  }
+
+  void registerUser() {
+    final userService = ApiService();
+    final response = userService.registerUser(username, email, password);
+
+    response.then((value) {
+      print(
+          "${value.username}, ${value.email}, ${value.password}, ${value.id}");
+      routeToNextScreen();
+    }).catchError((error) {
+      showAlertDialog(context, "Issue", error.message);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +75,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 MyTextField(
                     onChange: (String newText) {
                       setState(() {
-                        password = newText;
+                        email = newText;
                       });
                     },
                     controller: emailController,
@@ -67,7 +85,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 MyTextField(
                     onChange: (String newText) {
                       setState(() {
-                        username = newText;
+                        password = newText;
                       });
                     },
                     controller: newPasswordController,
@@ -77,7 +95,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(height: 25.0),
                 MyButton(
                   onTap: () {
-                    Navigator.pushNamed(context, '/');
+                    registerUser();
                   },
                   buttonTitle: "Create User",
                   bckgColor: Colors.black,
@@ -86,7 +104,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(height: 15.0),
                 MyButton(
                   onTap: () {
-                    Navigator.pushNamed(context, '/');
+                    print("before register: $username, $password, $email");
+                    registerUser();
                   },
                   buttonTitle: "Sign In Instead",
                   bckgColor: Colors.white,

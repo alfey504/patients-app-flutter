@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:we_care/api/services/patient_service.dart';
 import 'package:we_care/components/my_textfield.dart';
 import 'package:we_care/components/my_button.dart';
 import 'package:we_care/components/smallbuttons.dart';
 import 'package:we_care/components/patient.dart';
+import 'package:we_care/main.dart';
 import 'package:we_care/screens/onePatient.dart';
 
+import '../api/models/add_patient_response.dart';
+
 class OnePatient extends StatelessWidget {
+  late PatientDataModel patientData;
+
   OnePatient({super.key});
+
   final _firstController = ScrollController();
   final patientController = TextEditingController();
 
@@ -15,6 +22,26 @@ class OnePatient extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // getting the patient data from thr arguments
+    patientData =
+        ModalRoute.of(context)!.settings.arguments as PatientDataModel;
+
+    void deletePatient() {
+      final patientService = PatientService();
+      print(patientData.id);
+      final response = patientService.deletePatientById(patientData.id);
+
+      response.then((value) {
+        if (value) {
+          Navigator.pushNamed(context, '/allpatients');
+        } else {
+          showAlertDialog(context, "Issue", "Failed to delete user");
+        }
+      }).onError((error, stackTrace) {
+        showAlertDialog(context, "Issue", error.toString());
+      });
+    }
+
     return MaterialApp(
       home: Scaffold(
         backgroundColor: Colors.grey[300],
@@ -29,7 +56,7 @@ class OnePatient extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  'John Doe',
+                  patientData.patientName,
                   style: TextStyle(
                     color: Colors.teal[900],
                     fontSize: 18,
@@ -42,7 +69,7 @@ class OnePatient extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 24.0),
                       child: Text(
-                        '25 Years old',
+                        patientData.age,
                         style: TextStyle(
                           color: Colors.teal[900],
                           fontSize: 16,
@@ -51,7 +78,7 @@ class OnePatient extends StatelessWidget {
                     ),
                     const SizedBox(width: 16.0),
                     Text(
-                      'Status: Critical',
+                      'Status: ${patientData.status}',
                       style: TextStyle(
                         color: Colors.teal[900],
                         fontSize: 16,
@@ -65,7 +92,7 @@ class OnePatient extends StatelessWidget {
                   child: Row(
                     children: [
                       Text(
-                        'Current Address: 941 Progress Ave',
+                        'Current Address: ${patientData.address}',
                         style: TextStyle(
                           color: Colors.teal[900],
                           fontSize: 16,
@@ -80,7 +107,7 @@ class OnePatient extends StatelessWidget {
                   child: Row(
                     children: [
                       Text(
-                        'Allergies: Penicilin',
+                        'Allergies: ${patientData.allergies}',
                         style: TextStyle(
                           color: Colors.teal[900],
                           fontSize: 16,
@@ -95,7 +122,7 @@ class OnePatient extends StatelessWidget {
                   child: Row(
                     children: [
                       Text(
-                        'Emergency Contact Name: John',
+                        'Emergency Contact Name: ${patientData.emergencyContactName}',
                         style: TextStyle(
                           color: Colors.teal[900],
                           fontSize: 16,
@@ -110,7 +137,7 @@ class OnePatient extends StatelessWidget {
                   child: Row(
                     children: [
                       Text(
-                        'Allergies: Diabetes',
+                        'Emergency contact number: ${patientData.emergencyContactNumber}',
                         style: TextStyle(
                           color: Colors.teal[900],
                           fontSize: 16,
@@ -147,7 +174,7 @@ class OnePatient extends StatelessWidget {
                 const SizedBox(height: 8.0),
                 MySmallButton(
                   onTap: () {
-                    Navigator.pushNamed(context, '/allpatients');
+                    deletePatient();
                   },
                   buttonTitle: "Delete",
                   bckgColor: const Color.fromARGB(255, 164, 56, 56),
