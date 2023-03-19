@@ -41,7 +41,73 @@ class _AddPatientState extends State<AddPatient> {
     Navigator.pushNamed(context, '/allpatients');
   }
 
+  bool isANumber(String str) {
+    try {
+      int.parse(str);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  bool verifyInputs() {
+    if (patientName.isEmpty) {
+      showAlertDialog(context, "Missing Fields", "Please enter your full name");
+      return false;
+    }
+    if (age.isEmpty || !isANumber(age)) {
+      showAlertDialog(context, "Missing Fields", "Invalid age");
+      return false;
+    }
+    if (dob.isEmpty) {
+      showAlertDialog(
+          context, "Missing Fields", "Please enter a date of birth");
+      return false;
+    }
+    if (status.isEmpty) {
+      showAlertDialog(context, "Missing Fields", "Please enter a Status");
+      return false;
+    } else if (status != "Critical" && status != "Non Critical") {
+      showAlertDialog(context, "Invalid Status",
+          "Status can only be either Critical or Non Critical");
+      return false;
+    }
+    if (address.isEmpty) {
+      showAlertDialog(context, "Missing Fields", "Please enter a Address");
+      return false;
+    }
+    if (postalCode.isEmpty) {
+      showAlertDialog(context, "Missing Fields", "Please enter a postal code");
+      return false;
+    }
+    if (allergies.isEmpty) {
+      showAlertDialog(context, "Missing Fields", "Please enter a allergies");
+      return false;
+    }
+    if (emergencyContactName.isEmpty) {
+      showAlertDialog(
+          context, "Missing Fields", "Please enter a Emergency Contact Name");
+      return false;
+    }
+    if (emergencyContactNumber.isEmpty) {
+      showAlertDialog(
+          context, "Missing Fields", "Please enter a Emergency Contact Number");
+      return false;
+    }
+    if (medicalCondition.isEmpty) {
+      showAlertDialog(
+          context, "Missing Fields", "Please enter a Medical Condition");
+      return false;
+    }
+
+    return true;
+  }
+
   void addPatient() {
+    if (!verifyInputs()) {
+      return;
+    }
+
     final patientService = PatientService();
     final response = patientService.addPatient(
         patientName,

@@ -56,8 +56,75 @@ class _EditPatientState extends State<EditPatient> {
       initSet = true;
     }
 
+    bool isANumber(String str) {
+      try {
+        int.parse(str);
+        return true;
+      } catch (error) {
+        return false;
+      }
+    }
+
+    bool verifyInputs() {
+      if (patientData.patientName.isEmpty) {
+        showAlertDialog(
+            context, "Missing Fields", "Please enter your full name");
+        return false;
+      }
+      if (patientData.age.isEmpty || !isANumber(patientData.age)) {
+        showAlertDialog(context, "Missing Fields", "Invalid age");
+        return false;
+      }
+      if (patientData.dob.isEmpty) {
+        showAlertDialog(
+            context, "Missing Fields", "Please enter a date of birth");
+        return false;
+      }
+      if (patientData.status.isEmpty) {
+        showAlertDialog(context, "Missing Fields", "Please enter a Status");
+        return false;
+      } else if (patientData.status != "Critical" &&
+          patientData.status != "Non Critical") {
+        showAlertDialog(context, "Invalid Status",
+            "Status can only be either Critical or Non Critical");
+        return false;
+      }
+      if (patientData.address.isEmpty) {
+        showAlertDialog(context, "Missing Fields", "Please enter a Address");
+        return false;
+      }
+      if (patientData.postalCode.isEmpty) {
+        showAlertDialog(
+            context, "Missing Fields", "Please enter a postal code");
+        return false;
+      }
+      if (patientData.allergies.isEmpty) {
+        showAlertDialog(context, "Missing Fields", "Please enter a allergies");
+        return false;
+      }
+      if (patientData.emergencyContactName.isEmpty) {
+        showAlertDialog(
+            context, "Missing Fields", "Please enter a Emergency Contact Name");
+        return false;
+      }
+      if (patientData.emergencyContactNumber.isEmpty) {
+        showAlertDialog(context, "Missing Fields",
+            "Please enter a Emergency Contact Number");
+        return false;
+      }
+      if (patientData.medicalCondition.isEmpty) {
+        showAlertDialog(
+            context, "Missing Fields", "Please enter a Medical Condition");
+        return false;
+      }
+
+      return true;
+    }
+
     void editPatient() {
-      print(patientData.allergies);
+      if (!verifyInputs()) {
+        return;
+      }
       final patientService = PatientService();
       final response =
           patientService.editPatientData(patientData.toPatientDataModel());
