@@ -6,7 +6,7 @@ import 'package:we_care/components/smallbuttons.dart';
 import 'package:we_care/main.dart';
 
 class EditPatient extends StatefulWidget {
-  EditPatient({super.key});
+  const EditPatient({super.key});
 
   @override
   State<EditPatient> createState() => _EditPatientState();

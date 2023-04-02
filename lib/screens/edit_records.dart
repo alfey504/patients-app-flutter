@@ -1,29 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:we_care/api/models/add_patient_response.dart';
+import 'package:we_care/api/models/patien_record_join_model.dart';
 import 'package:we_care/api/models/records_model.dart';
 import 'package:we_care/api/services/records_service.dart';
-import 'package:we_care/components/my_textfield.dart';
-import 'package:we_care/components/smallbuttons.dart';
 import 'package:we_care/main.dart';
-import 'package:we_care/user/user_auth.dart';
 
-class AddRecord extends StatefulWidget {
-  AddRecord({super.key});
+import '../components/my_textfield.dart';
+import '../components/smallbuttons.dart';
+import '../user/user_auth.dart';
+
+class EditRecord extends StatefulWidget {
+  const EditRecord({super.key});
 
   @override
-  State<AddRecord> createState() => _AddRecordState();
+  State<EditRecord> createState() => _EditRecordState();
 }
 
-class _AddRecordState extends State<AddRecord> {
-  final dateController = TextEditingController();
-  final typeController = TextEditingController();
-  final valueController = TextEditingController();
-
-  late PatientDataModel patientData;
+class _EditRecordState extends State<EditRecord> {
+  late RecordsModel record;
+  late PatientDataModel patient;
 
   String date = "";
   String type = "";
   String value = "";
+
+  TextEditingController dateController = TextEditingController();
+  TextEditingController typeController = TextEditingController();
+  TextEditingController valueController = TextEditingController();
+
+  bool initSet = false;
+
+  void deleteRecord() {
+    final recordsService = RecordService();
+    final response = recordsService.deleteRecord(record.id!);
+
+    response.then((value) {
+      showAlertDialog(context, "Success", "Successfully deleted record");
+      Navigator.pushNamed(context, '/records', arguments: patient);
+    }).catchError((error) {
+      showAlertDialog(context, "Failed", error.toString());
+    });
+  }
 
   bool verifyInputs() {
     if (date.isEmpty) {
@@ -41,22 +60,22 @@ class _AddRecordState extends State<AddRecord> {
     return true;
   }
 
-  void addRecord() {
+  void editRecord() {
     if (verifyInputs()) {
-      RecordsModel record = RecordsModel(
+      RecordsModel newRecord = RecordsModel(
           date: date,
           type: type,
           value: value,
-          recordLink: patientData.recordLink);
+          recordLink: patient.recordLink,
+          id: record.id);
       final RecordService recordService = RecordService();
       if (!UserAuth.isAuthorized()) {
         showAlertDialog(context, "Not Logged in", "Please log in");
         return;
       }
-      final response =
-          recordService.addRecord(record, UserAuth.token!, UserAuth.password!);
+      final response = recordService.editRecord(newRecord);
       response.then((value) {
-        Navigator.pushNamed(context, '/records', arguments: patientData);
+        Navigator.pushNamed(context, '/records', arguments: patient);
       }).catchError((error) {
         showAlertDialog(context, "Error", error.toString());
       });
@@ -65,8 +84,17 @@ class _AddRecordState extends State<AddRecord> {
 
   @override
   Widget build(BuildContext context) {
-    patientData =
-        ModalRoute.of(context)!.settings.arguments as PatientDataModel;
+    if (!initSet) {
+      final patientRecord =
+          ModalRoute.of(context)!.settings.arguments as PatientRecordJoin;
+      record = patientRecord.record;
+      patient = patientRecord.patient;
+
+      dateController.text = record.date;
+      typeController.text = record.type;
+      valueController.text = record.value;
+      initSet = true;
+    }
 
     return MaterialApp(
       home: Scaffold(
@@ -113,21 +141,30 @@ class _AddRecordState extends State<AddRecord> {
                 const SizedBox(height: 8.0),
                 MySmallButton(
                   onTap: () {
-                    addRecord();
+                    editRecord();
                   },
-                  buttonTitle: "Add New Record",
-                  bckgColor: Colors.white,
+                  buttonTitle: "Update Record",
+                  bckgColor: Colors.greenAccent,
                   buttonFontColor: Colors.black,
                 ),
                 const SizedBox(height: 8.0),
                 MySmallButton(
                   onTap: () {
                     Navigator.pushNamed(context, '/records',
-                        arguments: patientData);
+                        arguments: patient);
                   },
                   buttonTitle: "Go Back",
                   bckgColor: Colors.white,
                   buttonFontColor: Colors.black,
+                ),
+                const SizedBox(height: 8.0),
+                MySmallButton(
+                  onTap: () {
+                    deleteRecord();
+                  },
+                  buttonTitle: "Delete Record",
+                  bckgColor: Colors.redAccent,
+                  buttonFontColor: Colors.white,
                 ),
               ],
             ),
@@ -135,5 +172,6 @@ class _AddRecordState extends State<AddRecord> {
         ),
       ),
     );
+    ;
   }
 }

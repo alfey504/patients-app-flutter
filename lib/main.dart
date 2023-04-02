@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:we_care/api/services/user_service.dart';
 import 'package:we_care/components/my_textfield.dart';
 import 'package:we_care/components/my_button.dart';
+import 'package:we_care/screens/edit_records.dart';
 import 'package:we_care/screens/register.dart';
 import 'package:we_care/screens/homeScreen.dart';
 import 'package:we_care/screens/allPatients.dart';
@@ -32,6 +33,7 @@ void main() {
       '/records': (context) => AllRecords(),
       '/edit_patient': (context) => EditPatient(),
       '/add_record': (context) => AddRecord(),
+      '/edit_record': (context) => EditRecord()
     },
   ));
 }
@@ -72,7 +74,6 @@ class _LoginPageState extends State<LoginPage> {
     data.then((value) {
       UserAuth.token = value.token;
       UserAuth.password = password;
-
       print("${UserAuth.token}, ${UserAuth.password}");
       gotToHome();
     }).catchError((error) {

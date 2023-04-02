@@ -97,7 +97,6 @@ class OnePatient extends StatelessWidget {
                     ],
                   ),
                 ),
-
                 Padding(
                   padding: const EdgeInsets.all(24.0),
                   child: Row(
@@ -112,7 +111,6 @@ class OnePatient extends StatelessWidget {
                     ],
                   ),
                 ),
-
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24.0),
                   child: Row(
@@ -127,7 +125,6 @@ class OnePatient extends StatelessWidget {
                     ],
                   ),
                 ),
-
                 Padding(
                   padding: const EdgeInsets.all(24.0),
                   child: Row(
@@ -142,23 +139,6 @@ class OnePatient extends StatelessWidget {
                     ],
                   ),
                 ),
-
-                // Padding(
-                //   padding: const EdgeInsets.all(24.0),
-                //   child: Row(
-                //     children: [
-                //       Text(
-                //             'LATEST RECORDS',
-                //             style: TextStyle(
-                //               color: Colors.teal[900],
-                //               fontSize: 16,
-                //               fontWeight: FontWeight.bold
-                //             ),
-                //           ),
-                //             ],
-                //   ),
-                // ),
-
                 MySmallButton(
                   onTap: () {
                     Navigator.pushNamed(context, '/edit_patient',
@@ -178,22 +158,10 @@ class OnePatient extends StatelessWidget {
                   buttonFontColor: const Color.fromARGB(255, 255, 255, 255),
                 ),
                 const SizedBox(height: 50.0),
-                // ListView(
-                //   children: const <Widget>[
-                //     ListTile(
-                //       title: Text('Map'),
-                //     ),
-                //     ListTile(
-                //       title: Text('Album'),
-                //     ),
-                //     ListTile(
-                //       title: Text('Phone'),
-                //     ),
-                //   ],
-                // ),
                 MySmallButton(
                   onTap: () {
-                    Navigator.pushNamed(context, '/records');
+                    Navigator.pushNamed(context, '/records',
+                        arguments: patientData);
                   },
                   buttonTitle: "All Records",
                   bckgColor: Colors.white,

@@ -14,7 +14,6 @@ class AllPatients extends StatefulWidget {
 }
 
 class _AllPatientsState extends State<AllPatients> {
-  final _firstController = ScrollController();
   late Future<List<PatientDataModel>> futurePatientList;
 
   void goToViewPatientScreen() {}
