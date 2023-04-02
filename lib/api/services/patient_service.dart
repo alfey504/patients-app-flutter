@@ -161,4 +161,25 @@ class PatientService {
       throw Exception("Error calling the api");
     }
   }
+
+  Future<List<PatientDataModel>> findPatientByName(String name) async {
+    if (!UserAuth.isAuthorized()) {
+      throw Exception("Not authorized");
+    }
+
+    final headers = {HttpHeaders.contentTypeHeader: 'application/json'};
+    final uri = Uri.parse(
+        "https://we-care-centennial.herokuapp.com/wecare/byname/${name}?token=${UserAuth.token}&password=${UserAuth.password}");
+
+    final response = await http.get(uri, headers: headers);
+
+    if (response.statusCode == 200) {
+      final List<dynamic> rawList = jsonDecode(response.body);
+      final List<PatientDataModel> encodedList =
+          rawList.map((patient) => PatientDataModel.fromJson(patient)).toList();
+      return encodedList;
+    } else {
+      throw Exception("Api call failed");
+    }
+  }
 }

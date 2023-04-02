@@ -1,13 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:we_care/api/services/patient_service.dart';
 import 'package:we_care/components/my_textfield.dart';
 import 'package:we_care/components/my_button.dart';
+import 'package:we_care/main.dart';
 
-class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   final patientController = TextEditingController();
 
-  void findPatient() {}
+  String patientName = "";
+
+  void findPatientByName() {
+    if (patientName.isEmpty) {
+      showAlertDialog(context, "Missing Field", "Please enter a patient name");
+      return;
+    }
+
+    final patientService = PatientService();
+    final response = patientService.findPatientByName(patientName);
+
+    response.then((value) {
+      if (value.isEmpty) {
+        showAlertDialog(context, "No Such Patient",
+            "Could not find a patient with the given name");
+      } else {
+        Navigator.pushNamed(context, '/onepatient', arguments: value[0]);
+      }
+    }).catchError((error) {
+      showAlertDialog(context, "Failed", "Failed to find the user");
+    });
+  }
+
   void registerUser() {}
 
   @override
@@ -34,39 +63,45 @@ class HomeScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 MyTextField(
+                    onChange: (value) {
+                      setState(() {
+                        patientName = value;
+                      });
+                    },
                     controller: patientController,
                     hintText: 'Patients name',
-                  
                     obscureText: false),
                 const SizedBox(height: 16.0),
                 MyButton(
-                    onTap: registerUser,
+                    onTap: () {
+                      findPatientByName();
+                    },
                     buttonTitle: "Find Patient",
                     bckgColor: Colors.black,
                     buttonFontColor: Colors.white),
                 const SizedBox(height: 25.0),
                 MyButton(
                   onTap: () {
-                      Navigator.pushNamed(context, '/allpatients');
-                    },
+                    Navigator.pushNamed(context, '/allpatients');
+                  },
                   buttonTitle: "See All Patients",
                   bckgColor: Colors.black,
                   buttonFontColor: Colors.white,
                 ),
                 const SizedBox(height: 16.0),
                 MyButton(
-                 onTap: () {
-                      Navigator.pushNamed(context, '/critical');
-                    },
+                  onTap: () {
+                    Navigator.pushNamed(context, '/critical');
+                  },
                   buttonTitle: "See All Critical Patients",
                   bckgColor: Colors.black,
                   buttonFontColor: Colors.white,
                 ),
                 const SizedBox(height: 16.0),
                 MyButton(
-                 onTap: () {
-                      Navigator.pushNamed(context, '/add');
-                    },
+                  onTap: () {
+                    Navigator.pushNamed(context, '/add');
+                  },
                   buttonTitle: "Add New Patient",
                   bckgColor: Colors.black,
                   buttonFontColor: Colors.white,
