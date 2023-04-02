@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:we_care/api/services/patient_service.dart';
 import 'package:we_care/components/smallbuttons.dart';
+import 'package:we_care/components/value_label.dart';
 import 'package:we_care/main.dart';
 
 import '../api/models/add_patient_response.dart';
@@ -60,85 +61,23 @@ class OnePatient extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 16),
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                      child: Text(
-                        patientData.age,
-                        style: TextStyle(
-                          color: Colors.teal[900],
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 16.0),
-                    Text(
-                      'Status: ${patientData.status}',
-                      style: TextStyle(
-                        color: Colors.teal[900],
-                        fontSize: 16,
-                      ),
-                    ),
-                  ],
-                ),
+                LabelValue(label: "Age", value: patientData.age),
+                const SizedBox(height: 8.0),
+                LabelValue(label: "Status", value: patientData.status),
+                const SizedBox(height: 8.0),
+                LabelValue(
+                    label: "Current Address", value: patientData.address),
+                const SizedBox(height: 8.0),
+                LabelValue(label: "Allergies", value: patientData.allergies),
+                const SizedBox(height: 8.0),
+                LabelValue(
+                    label: "Emergency Contact Name",
+                    value: patientData.emergencyContactName),
+                const SizedBox(height: 8.0),
+                LabelValue(
+                    label: "Emergency Contact Number",
+                    value: patientData.emergencyContactNumber),
                 const SizedBox(height: 16.0),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: Row(
-                    children: [
-                      Text(
-                        'Current Address: ${patientData.address}',
-                        style: TextStyle(
-                          color: Colors.teal[900],
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: Row(
-                    children: [
-                      Text(
-                        'Allergies: ${patientData.allergies}',
-                        style: TextStyle(
-                          color: Colors.teal[900],
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: Row(
-                    children: [
-                      Text(
-                        'Emergency Contact Name: ${patientData.emergencyContactName}',
-                        style: TextStyle(
-                          color: Colors.teal[900],
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: Row(
-                    children: [
-                      Text(
-                        'Emergency contact number: ${patientData.emergencyContactNumber}',
-                        style: TextStyle(
-                          color: Colors.teal[900],
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
                 MySmallButton(
                   onTap: () {
                     Navigator.pushNamed(context, '/edit_patient',
